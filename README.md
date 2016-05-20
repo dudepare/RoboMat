@@ -13,6 +13,7 @@ Checkout robots.md for a detailed description of the project.
 
 + Run robomat in interactive mode
     $ ruby robomat.rb
+    
 
 #### Command format
 
