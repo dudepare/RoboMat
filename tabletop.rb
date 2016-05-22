@@ -27,7 +27,7 @@ class TableTop
     end
   end
 
-  def within_table?(xpos, ypos)
+  def is_point_inside?(xpos, ypos)
     xpos = convert_x(xpos)
     ypos = convert_y(ypos)
     xpos >= 0 && xpos <= max_row() && ypos >= 0 && ypos <= max_col()

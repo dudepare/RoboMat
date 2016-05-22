@@ -17,38 +17,45 @@ class Command
     result
   end
 
-  def place_within_table?
-    yes = true
-    # this is the place command
+  def place_within_table?(table)
     x = @params['xpos'].to_i
     y = @params['ypos'].to_i
-    if not tabletop.within_table(x, y)
-      yes = false
+    valid = table.is_point_inside?(x, y)
+  end
+
+  def move_within_table?(robot, table)
+    x = robot.xpos
+    y = robot.ypos
+    f = robot.facing
+    puts case f
+    when 'E'
+      x = x + 1
+    when 'N'
+      y = y + 1
+    when 'W'
+      x = x - 1
+    when 'S'
+      y = y - 1
     end
-    yes
+    valid = table.is_point_inside?(x, y)
   end
 
   def is_valid?(robot, tabletop)
     valid = true
     if not robot.on_the_table
-      # all other operations are not valid
-      # when robot is not on the table
-      if @operation != "PLACE"
-        valid = false
-      else
-        valid = place_within_table?
-      end
+      valid = @operation != "PLACE" ? false : place_within_table?(tabletop)
     else
       check_commands = %w[MOVE PLACE]
       if check_commands.include? @operation
         puts case @operation
         when "MOVE"
-          
-        when "PLACE"
-          valid = place_within_table?
+          valid = move_within_table?(robot, tabletop)
+        when "PLACE"   
+          valid = place_within_table?(tabletop)
         end
       end
-    end    
+    end
+    valid    
   end
 end
 
