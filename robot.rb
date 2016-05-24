@@ -29,10 +29,11 @@ class Robot
 
   def report(args = nil)
     puts "called : report()"
+    output = ""
     if @on_the_table
-      puts "Robot is at (#{xpos}, #{ypos}) facing #{@facing}"
+      output = "Robot is at (#{xpos}, #{ypos}) facing #{@facing}"
     else
-      puts "Robot is not on the table -- doing nothing."
+      output = "Robot is not on the table -- doing nothing."
     end
   end
 
