@@ -3,7 +3,7 @@ class Command
   attr_writer :result
 
   # Holds the commands for the robot
-  def initialize(cmd, params=[])
+  def initialize(cmd, params=nil)
     @operation = cmd
     @params = params
     @result = false
@@ -11,15 +11,15 @@ class Command
 
   def to_s
     result = "Command #{@operation}" 
-    if @params.length > 0
+    if @params
       result += " with arguments #{@params}"
     end
     result
   end
 
   def place_within_table?(table)
-    x = @params['xpos'].to_i
-    y = @params['ypos'].to_i
+    x = @params[1].to_i
+    y = @params[2].to_i
     valid = table.is_point_inside?(x, y)
   end
 
@@ -57,6 +57,10 @@ class Command
     end
     valid    
   end
+
+  private :move_within_table?, :place_within_table?
+  public :is_valid?
+
 end
 
 class CommandParser
@@ -76,10 +80,12 @@ class CommandParser
       line = line.chomp.upcase
       place_command = CommandParser::PLACE_REGX.match(line)
       if place_command
-        @commands << Command.new("PLACE", place_command)
+        @commands << Command.new("PLACE", place_command.to_a)
       elsif @valid_commands.include? line
           @commands << Command.new(line)
       end
     end
   end
+
+  private :load_commands
 end

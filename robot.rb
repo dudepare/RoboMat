@@ -27,6 +27,7 @@ class Robot
     end
   end
 
+
   def report(args = nil)
     puts "called : report()"
     output = ""
@@ -39,31 +40,36 @@ class Robot
 
   def move(args = nil)
     puts "called : move()"
-    if @on_the_table
-      puts case @facing
-      when 'e', 'E'
-        @xpos += 1
-      when 'n', 'N'
-        @ypos += 1
-      when 'w', 'W'
-        @xpos -= 1
-      when 's', 'S'
-        @ypos -= 1
-      end
-    end    
+    if not @on_the_table
+      return
+    end
+    puts case @facing
+    when 'e', 'E'
+      @xpos += 1
+    when 'n', 'N'
+      @ypos += 1
+    when 'w', 'W'
+      @xpos -= 1
+    when 's', 'S'
+      @ypos -= 1
+    end
   end
 
   def place(args = nil)
     puts "called : place()"
-    @xpos = args['xpos'].to_i
-    @ypos = args['ypos'].to_i
-    @facing = args['direction'].upcase[0]
+    @xpos = args[1].to_i
+    @ypos = args[2].to_i
+    @facing = args[3].upcase[0]
     @on_the_table = true
     report()
   end
 
   def left(args = nil)
     puts "called: left()"
+    if not @on_the_table
+      return
+    end
+
     index = @directions.index(@facing)
     puts "Robot was facing #{@directions[index]}"
     if index
@@ -80,6 +86,10 @@ class Robot
 
   def right(args = nil)
     puts "called: right()"
+    if not @on_the_table
+      return
+    end
+
     index = @directions.index(@facing)
     puts "Robot was facing #{@directions[index]}"
     if index
@@ -93,6 +103,9 @@ class Robot
       puts "Robot is facing the ground."
     end
   end
+
+  private :report, :move, :place, :left, :right
+  public :do
 end
 
 
