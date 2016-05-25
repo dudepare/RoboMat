@@ -27,7 +27,7 @@ class Command
     x = robot.xpos
     y = robot.ypos
     f = robot.facing
-    puts case f
+    case f
     when 'E'
       x = x + 1
     when 'N'
@@ -47,7 +47,7 @@ class Command
     else
       check_commands = %w[MOVE PLACE]
       if check_commands.include? @operation
-        puts case @operation
+        case @operation
         when "MOVE"
           valid = move_within_table?(robot, tabletop)
         when "PLACE"   

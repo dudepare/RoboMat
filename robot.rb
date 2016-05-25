@@ -13,7 +13,7 @@ class Robot
   # this assumes the command is already valid
   # all we need is to perform the command
   def do(command)
-    puts case command.operation
+    case command.operation
     when "REPORT"
       report()
     when "MOVE"
@@ -27,23 +27,21 @@ class Robot
     end
   end
 
-
   def report(args = nil)
-    puts "called : report()"
     output = ""
     if @on_the_table
       output = "Robot is at (#{xpos}, #{ypos}) facing #{@facing}"
     else
       output = "Robot is not on the table -- doing nothing."
     end
+    puts output
   end
 
   def move(args = nil)
-    puts "called : move()"
     if not @on_the_table
       return
     end
-    puts case @facing
+    case @facing
     when 'e', 'E'
       @xpos += 1
     when 'n', 'N'
@@ -56,7 +54,6 @@ class Robot
   end
 
   def place(args = nil)
-    puts "called : place()"
     @xpos = args[1].to_i
     @ypos = args[2].to_i
     @facing = args[3].upcase[0]
@@ -65,40 +62,34 @@ class Robot
   end
 
   def left(args = nil)
-    puts "called: left()"
     if not @on_the_table
       return
     end
 
     index = @directions.index(@facing)
-    puts "Robot was facing #{@directions[index]}"
     if index
       index -= 1
       if index < 0
         index = @directions.length - 1
       end
       @facing = @directions[index]
-      puts "Robot is now facing #{@directions[index]}"
     else
       puts "Robot is facing the ground."
     end
   end
 
   def right(args = nil)
-    puts "called: right()"
     if not @on_the_table
       return
     end
 
     index = @directions.index(@facing)
-    puts "Robot was facing #{@directions[index]}"
     if index
       index += 1
       if index > @directions.length - 1
         index = 0
       end
       @facing = @directions[index]
-      puts "Robot is now facing #{@directions[index]}"
     else
       puts "Robot is facing the ground."
     end
@@ -107,6 +98,3 @@ class Robot
   private :report, :move, :place, :left, :right
   public :do
 end
-
-
-
