@@ -7,13 +7,8 @@ Checkout robots.md for a detailed description of the project.
 
 ### Commandline mode
 + Run the robomat with an external file containing commands for the robot.
-    $ ruby robomat.rb -f <commands.txt>
-
-### Interactive mode
-
-+ Run robomat in interactive mode
-    $ ruby robomat.rb
-    
+    $ ruby main.rb
++ By default main.rb reads in commands from `input.dat` file. 
 
 #### Command format
 
