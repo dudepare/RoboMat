@@ -1,8 +1,8 @@
 require 'minitest/autorun'
 require 'minitest/spec'
-require_relative 'command'
-require_relative 'robot'
-require_relative 'tabletop'
+require_relative '../command'
+require_relative '../robot'
+require_relative '../tabletop'
 
 describe Command do
 

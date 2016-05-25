@@ -1,6 +1,6 @@
 require 'minitest/autorun'
 require 'minitest/spec'
-require_relative 'tabletop'
+require_relative '../tabletop'
 
 describe TableTop do
 

@@ -1,7 +1,7 @@
 require 'minitest/autorun'
 require 'minitest/spec'
-require_relative 'robot'
-require_relative 'command'
+require_relative '../robot'
+require_relative '../command'
 
 describe Robot, "Test suite for the robot class" do
 
