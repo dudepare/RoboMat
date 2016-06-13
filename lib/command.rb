@@ -72,20 +72,27 @@ class CommandParser
     @file = command_file
     @valid_commands = %w[PLACE MOVE LEFT RIGHT REPORT]
     @commands = []
-    load_commands()
   end
 
-  def load_commands()
+  def parse_command(line)
+    line = line.chomp.upcase
+    place_command = CommandParser::PLACE_REGX.match(line)
+    if place_command
+      command = Command.new("PLACE", place_command.to_a)
+    elsif @valid_commands.include? line
+      command = Command.new(line)
+    end
+    command
+  end
+
+  def load_commands
     IO.foreach(@file) do | line |
-      line = line.chomp.upcase
-      place_command = CommandParser::PLACE_REGX.match(line)
-      if place_command
-        @commands << Command.new("PLACE", place_command.to_a)
-      elsif @valid_commands.include? line
-          @commands << Command.new(line)
-      end
+      @commands << parse_command(line)
     end
   end
 
-  private :load_commands
+  def get_command
+    gets
+  end
+  
 end

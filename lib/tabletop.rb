@@ -13,15 +13,15 @@ class TableTop
     end
   end
 
-  def max_row
+  def max_row()
     @rows - 1
   end
 
-  def max_col
+  def max_col()
     @cols - 1
   end
 
-  def show
+  def show()
     @rows.times do | row | 
         puts "#{@grid[row]}"
     end
@@ -30,16 +30,15 @@ class TableTop
   def is_point_inside?(xpos, ypos)
     xpos = convert_x(xpos)
     ypos = convert_y(ypos)
-    xpos >= 0 && xpos <= max_col() && ypos >= 0 && ypos <= max_row()
+    xpos >= 0 && xpos <= max_row() && ypos >= 0 && ypos <= max_col()
   end
 
   def set_position(xpos, ypos)
-    reset()
     xval = convert_x(xpos)
     yval = convert_y(ypos)
     @rows.times do | row | 
       @cols.times do | col |
-        if row == yval && col == xval
+        if row == xval && col == yval
           @grid[row][col] = 1
         end
       end
@@ -47,7 +46,7 @@ class TableTop
   end
 
   # zeroes out our grid
-  def reset
+  def reset()
     @rows.times do | row | 
       @cols.times do | col |
         @grid[row][col] = 0
@@ -56,12 +55,10 @@ class TableTop
   end
 
   def convert_x(xpos)
-    xpos
+    @cols - (xpos + 1)
   end
 
   def convert_y(ypos)
-    @rows - (ypos+1)
+    ypos
   end
-
-  public :reset, :set_position, :is_point_inside?, :show, :max_col, :max_row, :convert_x, :convert_y
 end
