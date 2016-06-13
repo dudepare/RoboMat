@@ -10,23 +10,6 @@ class Robot
     @directions = %w[N E S W]
   end
 
-  # this assumes the command is already valid
-  # all we need is to perform the command
-  def do(command)
-    case command.operation
-    when "REPORT"
-      report()
-    when "MOVE"
-      move()
-    when "LEFT"
-      left()
-    when "RIGHT"
-      right()
-    when "PLACE"
-      place(command.params)
-    end
-  end
-
   def report(args = nil)
     output = ""
     if @on_the_table
@@ -94,7 +77,6 @@ class Robot
       puts "Robot is facing the ground."
     end
   end
-
-  private :report, :move, :place, :left, :right
-  public :do
+ 
+  public :report, :move, :place, :left, :right
 end

@@ -5,18 +5,16 @@ require_relative("../lib/application")
 
 options = {}
 OptionParser.new do |cmd|
-    cmd.banner = "Usage: robomat [options] [filename]"
+  cmd.banner = "Usage: robomat [options] [filename]"
 
-    cmd.on("-h", "--help", "Shows this message") do
-        puts cmd
-        exit
-    end
+  cmd.on("-h", "--help", "Shows this message") do
+    puts cmd
+    exit
+  end
 
-    cmd.on("-f", "--file FILENAME", "Reads commands from filename") do |args|
-        options[:file] = args
-
-    end
-
+  cmd.on("-f", "--file FILENAME", "Reads commands from filename") do |args|
+    options[:file] = args
+  end
 end.parse!
 
 command_source = options[:file]

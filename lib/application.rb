@@ -20,7 +20,13 @@ class Application
   def self.execute(cmd)
     if cmd.is_valid?(@robot, @table)
 
-      @robot.do(cmd)
+      operation = cmd.operation.downcase
+      if @robot.respond_to?(operation)
+        @robot.send(operation, cmd.params)
+      else
+        puts "#{cmd} not available"
+        return
+      end
 
       @table.set_position(@robot.xpos, @robot.ypos)
     else
