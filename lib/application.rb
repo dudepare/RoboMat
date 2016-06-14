@@ -18,17 +18,16 @@ class Application
   end
 
   def self.execute(cmd)
-    if cmd.is_valid?(@robot, @table)
+    if cmd.is_valid?(@robot)
 
       operation = cmd.operation.downcase
-      if @robot.respond_to?(operation)
-        @robot.send(operation, cmd.params)
-      else
-        puts "#{cmd} not available"
-        return
+      args = cmd.params.nil? ? [] : cmd.params
+      args << @table
+
+      if !@robot.send(operation, args)
+        puts "#{cmd.operation} is rejected by the robot"
       end
 
-      @table.set_position(@robot.xpos, @robot.ypos)
     else
       puts "#{cmd} not valid"
     end

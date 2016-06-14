@@ -1,12 +1,9 @@
 class Command
-  attr_reader :operation, :params
-  attr_writer :result
 
-  # Holds the commands for the robot
+  attr_reader :operation, :params
   def initialize(cmd, params=nil)
     @operation = cmd
     @params = params
-    @result = false
   end
 
   def to_s
@@ -17,56 +14,16 @@ class Command
     result
   end
 
-  def place_within_table?(table)
-    x = @params[1].to_i
-    y = @params[2].to_i
-    valid = table.is_point_inside?(x, y)
+  def is_valid?(robot)
+    valid = robot.respond_to?(@operation.downcase)
   end
-
-  def move_within_table?(robot, table)
-    x = robot.xpos
-    y = robot.ypos
-    f = robot.facing
-    case f
-    when 'E'
-      x = x + 1
-    when 'N'
-      y = y + 1
-    when 'W'
-      x = x - 1
-    when 'S'
-      y = y - 1
-    end
-    valid = table.is_point_inside?(x, y)
-  end
-
-  def is_valid?(robot, tabletop)
-    valid = true
-    if not robot.on_the_table
-      valid = @operation != "PLACE" ? false : place_within_table?(tabletop)
-    else
-      check_commands = %w[MOVE PLACE]
-      if check_commands.include? @operation
-        case @operation
-        when "MOVE"
-          valid = move_within_table?(robot, tabletop)
-        when "PLACE"   
-          valid = place_within_table?(tabletop)
-        end
-      end
-    end
-    valid    
-  end
-
-  private :move_within_table?, :place_within_table?
-  public :is_valid?
 
 end
 
 class CommandParser
 
   attr_reader :commands
-  PLACE_REGX = /PLACE\s+(?<xpos>\d)\s*,\s*(?<ypos>\d)\s*,\s*(?<direction>EAST|WEST|NORTH|SOUTH)/
+  PLACE_REGX = /PLACE\s+(?<xpos>[-]?\d)\s*,\s*(?<ypos>[-]?\d)\s*,\s*(?<direction>EAST|WEST|NORTH|SOUTH)/
 
   def initialize(command_file)
     @file = command_file

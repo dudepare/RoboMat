@@ -1,53 +1,68 @@
 class Robot
 
-  attr_reader :xpos, :ypos, :facing
-  attr_accessor :on_the_table
   def initialize()
     @xpos = -1
     @ypos = -1
-    @on_the_table = false
     @facing = ""
     @directions = %w[N E S W]
   end
 
-  def report(args = nil)
-    output = ""
-    if @on_the_table
-      output = "Robot is at (#{xpos}, #{ypos}) facing #{@facing}"
-    else
-      output = "Robot is not on the table -- doing nothing."
-    end
-    puts output
+  def is_valid?(xpos, ypos, table)
+    table.is_point_inside?(xpos, ypos)
   end
 
-  def move(args = nil)
-    if not @on_the_table
-      return
-    end
+  def on_the_table
+    (@xpos != -1) and (@ypos != -1) and !@facing.empty?
+  end
+
+  def report(args)
+    return false if !on_the_table
+
+    output = "Robot is at (#{@xpos}, #{@ypos}) facing #{@facing}"
+    puts output
+
+    true
+  end
+
+  def move(args)
+    return false if !on_the_table
+    
+    xpos = @xpos
+    ypos = @ypos
     case @facing
     when 'e', 'E'
-      @xpos += 1
+      xpos += 1
     when 'n', 'N'
-      @ypos += 1
+      ypos += 1
     when 'w', 'W'
-      @xpos -= 1
+      xpos -= 1
     when 's', 'S'
-      @ypos -= 1
+      ypos -= 1
     end
+
+    if result = is_valid?(xpos, ypos, args.last)
+      @xpos = xpos
+      @ypos = ypos
+    end
+    result
   end
 
-  def place(args = nil)
-    @xpos = args[1].to_i
-    @ypos = args[2].to_i
-    @facing = args[3].upcase[0]
-    @on_the_table = true
-    report()
+  def place(args)
+    xpos = args[1].to_i
+    ypos = args[2].to_i
+    table = args.last
+    
+    if result = is_valid?(xpos, ypos, table)
+      @xpos = xpos
+      @ypos = ypos
+      @facing = args[3].upcase[0]
+      report(args)
+    end
+    result
   end
 
-  def left(args = nil)
-    if not @on_the_table
-      return
-    end
+  def left(args)
+    return false if !on_the_table
 
     index = @directions.index(@facing)
     if index
@@ -59,13 +74,12 @@ class Robot
     else
       puts "Robot is facing the ground."
     end
+    true
   end
 
-  def right(args = nil)
-    if not @on_the_table
-      return
-    end
-
+  def right(args)
+    return false if !on_the_table
+      
     index = @directions.index(@facing)
     if index
       index += 1
@@ -76,7 +90,8 @@ class Robot
     else
       puts "Robot is facing the ground."
     end
+    true
   end
  
-  public :report, :move, :place, :left, :right
+  public :report, :move, :place, :left, :right, :on_the_table
 end
