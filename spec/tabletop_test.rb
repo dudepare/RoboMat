@@ -1,6 +1,6 @@
 require 'minitest/autorun'
 require 'minitest/spec'
-require_relative '../tabletop'
+require_relative '../lib/tabletop'
 
 describe TableTop do
 
@@ -46,33 +46,6 @@ describe TableTop do
     end
   end
 
-  describe "#max_col", "#max_row" do
-  
-    describe "when no parameters are specified" do
-      it "returns 4" do
-        table = TableTop.new
-        table.max_col.must_equal 4
-        table.max_row.must_equal 4
-      end
-    end
-
-    describe "when non positive col is specified" do
-      it "returns 4" do
-        table = TableTop.new(0, -2)
-        table.max_col.must_equal 4
-        table.max_row.must_equal 4
-      end
-    end
-
-    describe "when positive col is specified" do
-      it "returns one less than the col" do
-        table = TableTop.new(15, 20)
-        table.max_col.must_equal 19
-        table.max_row.must_equal 14
-      end
-    end
-  end
-
   describe "#is_point_inside?" do
     
     before do
@@ -94,48 +67,6 @@ describe TableTop do
         @table.is_point_inside?(0,0).must_equal true
         @table.is_point_inside?(3,4).must_equal true
         @table.is_point_inside?(4,4).must_equal true
-      end
-    end
-  end
-
-  describe "#set_position", "#reset" do
-
-    before do
-      @table = TableTop.new
-    end
-
-    describe "when a valid row, col are specified" do
-
-      it "clears the table, sets the row, col bit to 1" do
-        @table.set_position(0,0)
-        count = 0
-        @table.rows.times do | row | 
-          @table.cols.times do | col |
-            if @table.grid[row][col] == 1
-              count += 1
-            end 
-          end
-        end
-        count.must_equal 1
-        col = @table.convert_x(0)
-        row = @table.convert_y(0)
-        @table.grid[row][col].must_equal 1
-      end
-    end
-
-    describe "when a invalid row, col are specified" do
-
-      it "clears the table" do
-        @table.set_position(-1,6)
-        count = 0
-        @table.rows.times do | row | 
-          @table.cols.times do | col |
-            if @table.grid[row][col] == 0
-              count += 1
-            end 
-          end
-        end
-        count.must_equal 5*5
       end
     end
   end

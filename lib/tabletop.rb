@@ -1,5 +1,7 @@
 class TableTop
 
+  attr_reader :rows, :cols
+
   def initialize(rows=5, cols=5)
     @rows = rows > 0 ? rows : 5
     @cols = cols > 0 ? cols : 5

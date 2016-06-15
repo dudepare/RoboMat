@@ -1,7 +1,8 @@
 require 'minitest/autorun'
 require 'minitest/spec'
-require_relative '../robot'
-require_relative '../command'
+require_relative '../lib/robot'
+require_relative '../lib/command'
+require_relative '../lib/tabletop'
 
 describe Robot, "Test suite for the robot class" do
 
@@ -27,12 +28,12 @@ describe Robot, "Test suite for the robot class" do
     end
   end
 
-  describe "#do" do
+  describe "#[command]" do
     
     describe "when first command is not a valid PLACE command" do
       it "MOVE command is ignored" do
         cmd = Command.new("MOVE")
-        @robot.do(cmd)
+        @robot.send(cmd.operation.downcase, cmd.params)
         @robot.on_the_table.must_equal false
         @robot.xpos.must_equal -1
         @robot.ypos.must_equal -1
@@ -41,7 +42,7 @@ describe Robot, "Test suite for the robot class" do
 
       it "REPORT command is ignored" do
         cmd = Command.new("REPORT")
-        @robot.do(cmd)
+        @robot.send(cmd.operation.downcase, cmd.params)
         @robot.on_the_table.must_equal false
         @robot.xpos.must_equal -1
         @robot.ypos.must_equal -1
@@ -50,7 +51,7 @@ describe Robot, "Test suite for the robot class" do
 
       it "LEFT command is ignored" do
         cmd = Command.new("LEFT")
-        @robot.do(cmd)
+        @robot.send(cmd.operation.downcase, cmd.params)
         @robot.on_the_table.must_equal false
         @robot.xpos.must_equal -1
         @robot.ypos.must_equal -1
@@ -59,7 +60,7 @@ describe Robot, "Test suite for the robot class" do
 
       it "RIGHT command is ignored" do
         cmd = Command.new("RIGHT")
-        @robot.do(cmd)
+        @robot.send(cmd.operation.downcase, cmd.params)
         @robot.on_the_table.must_equal false
         @robot.xpos.must_equal -1
         @robot.ypos.must_equal -1
@@ -70,7 +71,10 @@ describe Robot, "Test suite for the robot class" do
     describe "when first command is a valid PLACE command" do
       it "robot is placed on the table" do
         cmd = Command.new("PLACE", ["PLACE 0, 0, EAST", "0", "0", "EAST"])
-        @robot.do(cmd)
+        table = TableTop.new
+        args = cmd.params.nil? ? [] : cmd.params
+        args << table
+        @robot.send(cmd.operation.downcase, args)
         @robot.on_the_table.must_equal true
         @robot.xpos.must_equal 0
         @robot.ypos.must_equal 0
@@ -81,9 +85,12 @@ describe Robot, "Test suite for the robot class" do
     describe "when robot is on the table" do
       it "succeeding LEFT command gets done" do
         cmd1 = Command.new("PLACE", ["PLACE 0, 0, EAST", "0", "0", "EAST"])
-        @robot.do(cmd1)
+        table = TableTop.new
+        args = cmd1.params.nil? ? [] : cmd1.params
+        args << table
+        @robot.send(cmd1.operation.downcase, args)
         cmd2 = Command.new("LEFT")
-        @robot.do(cmd2)
+        @robot.send(cmd2.operation.downcase, args)
         @robot.on_the_table.must_equal true
         @robot.xpos.must_equal 0
         @robot.ypos.must_equal 0
@@ -92,9 +99,12 @@ describe Robot, "Test suite for the robot class" do
 
       it "succeeding RIGHT command gets done" do
         cmd1 = Command.new("PLACE", ["PLACE 0, 0, EAST", "0", "0", "EAST"])
-        @robot.do(cmd1)
+        table = TableTop.new
+        args = cmd1.params.nil? ? [] : cmd1.params
+        args << table
+        @robot.send(cmd1.operation.downcase, args)
         cmd2 = Command.new("RIGHT")
-        @robot.do(cmd2)
+        @robot.send(cmd2.operation.downcase, args)
         @robot.on_the_table.must_equal true
         @robot.xpos.must_equal 0
         @robot.ypos.must_equal 0
@@ -103,9 +113,12 @@ describe Robot, "Test suite for the robot class" do
 
       it "succeeding REPORT command gets done" do
         cmd1 = Command.new("PLACE", ["PLACE 0, 0, EAST", "0", "0", "EAST"])
-        @robot.do(cmd1)
+        table = TableTop.new
+        args = cmd1.params.nil? ? [] : cmd1.params
+        args << table
+        @robot.send(cmd1.operation.downcase, args)
         cmd2 = Command.new("REPORT")
-        @robot.do(cmd2)
+        @robot.send(cmd2.operation.downcase, args)
         @robot.on_the_table.must_equal true
         @robot.xpos.must_equal 0
         @robot.ypos.must_equal 0
@@ -114,9 +127,12 @@ describe Robot, "Test suite for the robot class" do
       
       it "succeeding MOVE command gets done" do
         cmd1 = Command.new("PLACE", ["PLACE 0, 0, EAST", "0", "0", "EAST"])
-        @robot.do(cmd1)
+        table = TableTop.new
+        args = cmd1.params.nil? ? [] : cmd1.params
+        args << table
+        @robot.send(cmd1.operation.downcase, args)
         cmd2 = Command.new("MOVE")
-        @robot.do(cmd2)
+        @robot.send(cmd2.operation.downcase, args)
         @robot.on_the_table.must_equal true
         @robot.xpos.must_equal 1
         @robot.ypos.must_equal 0

@@ -2,6 +2,8 @@ require_relative "compass"
 
 class Robot
 
+  attr_reader :xpos, :ypos, :facing
+
   def initialize()
     @xpos = -1
     @ypos = -1
@@ -77,5 +79,6 @@ class Robot
     true
   end
  
+  private :is_valid?
   public :report, :move, :place, :left, :right, :on_the_table
 end
