@@ -1,10 +1,12 @@
+require_relative "compass"
+
 class Robot
 
   def initialize()
     @xpos = -1
     @ypos = -1
     @facing = ""
-    @directions = %w[N E S W]
+    @compass = Compass.new
   end
 
   def is_valid?(xpos, ypos, table)
@@ -29,16 +31,11 @@ class Robot
     
     xpos = @xpos
     ypos = @ypos
-    case @facing
-    when 'e', 'E'
-      xpos += 1
-    when 'n', 'N'
-      ypos += 1
-    when 'w', 'W'
-      xpos -= 1
-    when 's', 'S'
-      ypos -= 1
-    end
+
+    offset = @compass.coordinates
+    
+    xpos += offset[0]
+    ypos += offset[1]
 
     if result = is_valid?(xpos, ypos, args.last)
       @xpos = xpos
@@ -56,6 +53,7 @@ class Robot
       @xpos = xpos
       @ypos = ypos
       @facing = args[3].upcase[0]
+      @compass.set_direction(@facing)
       report(args)
     end
     result
@@ -64,32 +62,18 @@ class Robot
   def left(args)
     return false if !on_the_table
 
-    index = @directions.index(@facing)
-    if index
-      index -= 1
-      if index < 0
-        index = @directions.length - 1
-      end
-      @facing = @directions[index]
-    else
-      puts "Robot is facing the ground."
-    end
+    @compass.rotate_left
+    @facing = @compass.where
+
     true
   end
 
   def right(args)
     return false if !on_the_table
-      
-    index = @directions.index(@facing)
-    if index
-      index += 1
-      if index > @directions.length - 1
-        index = 0
-      end
-      @facing = @directions[index]
-    else
-      puts "Robot is facing the ground."
-    end
+  
+    @compass.rotate_right
+    @facing = @compass.where
+
     true
   end
  
